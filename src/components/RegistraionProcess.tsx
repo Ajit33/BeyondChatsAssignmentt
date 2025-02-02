@@ -4,7 +4,8 @@ import SuccessScreen from "./SucessScreen"
 import UserRegistration from "./UserRegistraion"
 import Stepper from "./Stepper"
 import OrganizationSetup from "./OrganistionSetupComponent"
-import ChatbotIntegration from "./ChatBotIntegration"
+import ChatbotIntegration from "./ChatbotIntegrate"
+
 
 type Step = "user-registration" | "organization-setup" | "chatbot-integration" | "success"
 
