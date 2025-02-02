@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-// Adjust your auth client import
+import { Clock } from "lucide-react"
 
 interface UserRegistrationProps {
   onComplete: (data: any) => void
@@ -16,10 +16,23 @@ export default function UserRegistration({ onComplete }: UserRegistrationProps) 
   const [password, setPassword] = useState("")
   const [verificationCode, setVerificationCode] = useState("")
   const [isVerificationSent, setIsVerificationSent] = useState(false)
+  const [timer, setTimer] = useState(60)
+  const [canResend, setCanResend] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({})
 
-  // Real-time validation
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+    if (isVerificationSent && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1)
+      }, 1000)
+    } else if (timer === 0) {
+      setCanResend(true)
+    }
+    return () => clearInterval(interval)
+  }, [isVerificationSent, timer])
+
   useEffect(() => {
     const newErrors: { [key: string]: string } = {}
     
@@ -49,83 +62,109 @@ export default function UserRegistration({ onComplete }: UserRegistrationProps) 
     }
   }
 
-
-
   const sendVerificationCode = () => {
     if (Object.keys(errors).length === 0) {
       setIsVerificationSent(true)
+      setTimer(60)
+      setCanResend(false)
+    }
+  }
+
+  const resendCode = () => {
+    if (canResend) {
+      setTimer(60)
+      setCanResend(false)
+      // Implement resend logic here
     }
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-gray-50 to-blue-50">
+    <Card className="w-full max-w-md mx-auto bg-gradient-to-br from-gray-50 to-blue-50 registration-card">
       <CardHeader>
-        <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <CardTitle className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent text-center">
           Create Account
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
-            <div className="relative">
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                onBlur={() => handleBlur('name')}
-                className={`input-line ${errors.name ? 'error' : ''}`}
-                placeholder=" "
-              />
-              <Label htmlFor="name" className="input-label">
-                Full Name
-              </Label>
-              {errors.name && <span className="error-message">{errors.name}</span>}
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className={`space-y-6 ${!isVerificationSent ? 'slide-in' : ''}`}>
+            {!isVerificationSent && (
+              <>
+                <div className="relative">
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onBlur={() => handleBlur('name')}
+                    className={`input-line ${errors.name ? 'error' : ''}`}
+                    placeholder=" "
+                  />
+                  <Label htmlFor="name" className="input-label">
+                    Full Name
+                  </Label>
+                  {errors.name && <span className="error-message">{errors.name}</span>}
+                </div>
 
-            <div className="relative">
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={() => handleBlur('email')}
-                className={`input-line ${errors.email ? 'error' : ''}`}
-                placeholder=" "
-              />
-              <Label htmlFor="email" className="input-label">
-                Email Address
-              </Label>
-              {errors.email && <span className="error-message">{errors.email}</span>}
-            </div>
+                <div className="relative">
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onBlur={() => handleBlur('email')}
+                    className={`input-line ${errors.email ? 'error' : ''}`}
+                    placeholder=" "
+                  />
+                  <Label htmlFor="email" className="input-label">
+                    Email Address
+                  </Label>
+                  {errors.email && <span className="error-message">{errors.email}</span>}
+                </div>
 
-            <div className="relative">
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onBlur={() => handleBlur('password')}
-                className={`input-line ${errors.password ? 'error' : ''}`}
-                placeholder=" "
-              />
-              <Label htmlFor="password" className="input-label">
-                Password
-              </Label>
-              {errors.password && <span className="error-message">{errors.password}</span>}
-            </div>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onBlur={() => handleBlur('password')}
+                    className={`input-line ${errors.password ? 'error' : ''}`}
+                    placeholder=" "
+                  />
+                  <Label htmlFor="password" className="input-label">
+                    Password
+                  </Label>
+                  {errors.password && <span className="error-message">{errors.password}</span>}
+                </div>
+              </>
+            )}
 
             {isVerificationSent && (
-              <div className="relative animate-fade-in">
+              <div className="relative slide-in">
+                <div className="mb-4 text-center">
+                  <div className="verification-timer flex items-center justify-center gap-2 mb-2">
+                    <Clock className="w-4 h-4" />
+                    {timer > 0 ? (
+                      <span>Resend code in {timer}s</span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={resendCode}
+                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                      >
+                        Resend code
+                      </button>
+                    )}
+                  </div>
+                </div>
                 <Input
                   id="verificationCode"
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value)}
-                  className="input-line"
-                  placeholder=" "
+                  className="input-line text-center text-2xl tracking-wider"
+                  placeholder="Enter verification code"
+                  maxLength={6}
                 />
-                <Label htmlFor="verificationCode" className="input-label">
-                  Verification Code
-                </Label>
               </div>
             )}
           </div>
@@ -161,7 +200,6 @@ export default function UserRegistration({ onComplete }: UserRegistrationProps) 
           <Button
             type="button"
             variant="outline"
-           
             className="w-full google-button"
           >
             <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
