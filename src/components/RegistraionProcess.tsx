@@ -1,9 +1,10 @@
 import { useState } from "react"
-import ChatbotIntegration from "./ChatBotIntegration"
+
 import SuccessScreen from "./SucessScreen"
 import UserRegistration from "./UserRegistraion"
 import Stepper from "./Stepper"
 import OrganizationSetup from "./OrganistionSetupComponent"
+import ChatbotIntegration from "./ChatBotIntegration"
 
 type Step = "user-registration" | "organization-setup" | "chatbot-integration" | "success"
 
