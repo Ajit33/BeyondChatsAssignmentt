@@ -1,50 +1,55 @@
-# React + TypeScript + Vite
+## Live Link https://beyond-chats-assignmentt-3nfy.vercel.app/ 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## BeyondChats fontend developer assignmnet  
 
-Currently, two official plugins are available:
+## Running Locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> [!NOTE]  
+> This project uses [npm](https://npm.io/) only as a package manager.
 
-## Expanding the ESLint configuration
+1. Clone the repository:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+https://github.com/Ajit33/BeyondChatsAssignmentt.git
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Navigate to the project directory:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+cd BeyondChatsAssignmentt
 ```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+
+
+3. Start the development server:
+
+```bash
+npm run dev
+```
+
+## Usage
+
+1. Access the application in your browser:
+
+```bash
+http://localhost:5173
+```
+
+
+## teckStack
+Reactjs \
+tailwindcss \
+react-router-dom 
+ShadCn
+Framer motion
+
+
+## Thoughtprocess
+
+Nothing thought process is required as it a ui heavy assignmnet,but I did it with my skill and also Takes help of Internet.
